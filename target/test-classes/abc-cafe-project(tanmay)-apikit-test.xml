@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:mock="http://www.mulesoft.org/schema/mule/mock" xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/mock/current/mule-mock.xsd">
+    <spring:beans>
+        <spring:import resource="classpath:abc-cafe-project(tanmay).xml" />
+    </spring:beans>
+    <munit:config mock-connectors="false" mock-inbounds="false" doc:name="MUnit configuration"/>
+    <http:request-config name="HTTP_Request_Configuration" host="localhost" port="8081" basePath="/api" doc:name="HTTP Request Configuration"/>
+    <munit:test name="get:/insertBillTodata:api-config-200-application/json-FlowTest" description="Verifying functionality of [get:/insertBillTodata:api-config-200-application/json]">
+        <http:request config-ref="HTTP_Request_Configuration" method="GET" path="/insertBillTodata" doc:name="HTTP"/>
+        <object-to-string-transformer doc:name="http response to string" />
+        <munit:assert-true message="The HTTP Status code is not correct!" condition="#[messageInboundProperty('http.status').is(eq(200))]" doc:name="assert that - http.status eq 200" />
+        <munit:assert-not-null message="BillTo data is not updated in database!" doc:name="Assert Not Null Payload"/>
+
+    </munit:test>
+    <munit:test name="get:/fromDBtoActiveMQ:api-config-200-application/json-FlowTest" description="Verifying functionality of [get:/fromDBtoActiveMQ:api-config-200-application/json]">
+        <mock:when doc:name="Mock"/>
+        <http:request config-ref="HTTP_Request_Configuration" method="GET" path="/fromDBtoActiveMQ" doc:name="HTTP"/>
+        <object-to-string-transformer doc:name="http response to string" />
+        <munit:assert-true message="The HTTP Status code is not correct!" condition="#[messageInboundProperty('http.status').is(eq(200))]" doc:name="assert that - http.status eq 200" />
+        <munit:assert-not-null message="machine data is not pushed in ActiveMQ!" doc:name="Assert Not Null Payload"/>
+
+    </munit:test>
+    <munit:test name="get:/insertSellTodata:api-config-200-application/json-FlowTest" description="Verifying functionality of [get:/insertSellTodata:api-config-200-application/json]">
+        <http:request config-ref="HTTP_Request_Configuration" method="GET" path="/insertSellTodata" doc:name="HTTP"/>
+        <object-to-string-transformer doc:name="http response to string" />
+        <munit:assert-true message="The HTTP Status code is not correct!" condition="#[messageInboundProperty('http.status').is(eq(200))]" doc:name="assert that - http.status eq 200" />
+        <munit:assert-not-null message="SellTo data is not updated in database!" doc:name="Assert Not Null Payload"/>
+
+    </munit:test>
+    <munit:test name="get:/insertMachinesdata:api-config-200-application/json-FlowTest" description="Verifying functionality of [get:/insertMachinesdata:api-config-200-application/json]">
+        <http:request config-ref="HTTP_Request_Configuration" method="GET" path="/insertMachinesdata" doc:name="HTTP"/>
+        <object-to-string-transformer doc:name="http response to string" />
+        <munit:assert-true message="The HTTP Status code is not correct!" condition="#[messageInboundProperty('http.status').is(eq(200))]" doc:name="assert that - http.status eq 200" />
+        <munit:assert-not-null message="machine data is not updated in database!" doc:name="Assert Not Null Payload"/>
+
+    </munit:test>
+</mule>

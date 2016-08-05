@@ -1,0 +1,59 @@
+#%RAML 0.8
+baseUri: https://localhost:8081/
+title: ABC-cafe-Tanmay
+version: 1.0
+
+/insertBillTodata:
+  displayName: InsertBillTo
+  get:
+    description: Insert BillTo table data from salesforce to database
+    responses:
+     200:
+        body:
+          application/json:
+            example: |
+              {
+                "message": "BillTo data updated in Database"
+              }
+              
+    
+    
+/insertSellTodata:
+  displayName: resourceName
+  get:
+    description: Insert SellTo table data from salesforce to database
+    responses:
+     200:
+        body:
+          application/json:
+            example: |
+              {
+                "message": "SellTo data updated in Database"
+              }
+
+/insertMachinesdata:
+  displayName: resourceName    
+  get:
+    description: Insert Machine data from salesforce to database
+    responses:
+     200:
+        body:
+          application/json:
+            example: |
+              {
+                "message": "Machine data updated in Database"
+              }
+    
+    
+/fromDBtoActiveMQ:
+  displayName: resourceName
+  get:
+    description: Insert Machines data from database to ActiveMQ
+    responses:
+     200:
+        body:
+          application/json:
+            example: |
+              {
+                "message": "Database data inserted in ActiveMQ"
+              }
